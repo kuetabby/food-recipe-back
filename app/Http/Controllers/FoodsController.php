@@ -29,7 +29,7 @@ class FoodsController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function create(request $request)
+    public function create(Request $request)
     {
         try {
             $foods_create = new Foods();
@@ -37,6 +37,7 @@ class FoodsController extends Controller
             $foods_create->ingredients = $request->ingredients;
             $foods_create->img = $request->img;
             $foods_create->save();
+
             return response()->json(
                 [
                     'status_code' => 200,
@@ -97,9 +98,57 @@ class FoodsController extends Controller
      * @param  \App\Foods  $foods
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Foods $foods)
+    public function update(Request $request, $id)
     {
-        //
+        try {
+            $ingredients = $request->ingredients;
+            $img = $request->img;
+
+            $foods_update = Foods::find($id);
+            $foods_update->ingredients = $ingredients;
+            $foods_update->img = $img;
+            $foods_update->save();
+
+            return response()->json(
+                [
+                    'status_code' => 200,
+                    'data' => Foods::find($id)
+                ],
+                200
+            );
+        } catch (\Throwable $th) {
+            return response()->json(
+                [
+                    'status_code' => 422,
+                    'message' => 'Lengkapi Field'
+                ],
+                422
+            );
+        }
+    }
+
+    public function select($id)
+    {
+        try {
+            //code...
+
+            return response()->json(
+                [
+                    'status_code' => 200,
+                    'data' => Foods::find($id)
+                ],
+                200
+            );
+        } catch (\Throwable $th) {
+            //throw $th;
+            return response()->json(
+                [
+                    'status_code' => 404,
+                    'message' => 'Error'
+                ],
+                404
+            );
+        }
     }
 
     /**
@@ -108,11 +157,29 @@ class FoodsController extends Controller
      * @param  \App\Foods  $foods
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Foods $id)
+    public function destroy($id)
     {
-        $foods_destroy = Foods::find($id);
-        $foods_destroy->delete();
+        try {
+            //code...
+            $foods_destroy = Foods::find($id);
+            $foods_destroy->delete();
 
-        return "Deleted!";
+            return response()->json(
+                [
+                    'status_code' => 200,
+                    'data' => Foods::all()
+                ],
+                200
+            );
+        } catch (\Throwable $th) {
+            //throw $th;
+            response()->json(
+                [
+                    'status_code' => 404,
+                    'message' => 'Error'
+                ],
+                404
+            );
+        }
     }
 }
