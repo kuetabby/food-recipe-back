@@ -17,4 +17,7 @@ Route::get('/', function () {
 
 Route::get('foods/recipe', 'FoodsController@index');
 Route::post('foods/recipe', 'FoodsController@create');
+
+Route::get('foods/recipe/{id}', 'FoodsController@select');
+Route::post('foods/recipe/{id}', 'FoodsController@update');
 Route::delete('foods/recipe/{id}', 'FoodsController@destroy');
